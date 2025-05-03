@@ -11,6 +11,10 @@ CREATE TABLE usuarios (
     tipo ENUM('usuario', 'administrador') NOT NULL DEFAULT 'usuario'
 );
 
+-- Inserção de usuário para teste
+INSERT INTO usuarios (usuario, senha, email, tipo) VALUES
+('ivanilson', 'krolanda', 'ivanilsonpc@outlook.com', 'usuario');
+
 -- Tabela de partidas
 CREATE TABLE partidas (
     id INT AUTO_INCREMENT PRIMARY KEY,

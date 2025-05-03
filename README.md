@@ -1,4 +1,8 @@
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d04b78255774b3a7eab98acea5270b79505ed08e
 ## 🏸 ** Badminton e Parabadminton** - README
 
 ### 📌 **Descrição**
@@ -128,5 +132,9 @@ UPDATE usuarios SET tipo='administrador' WHERE usuario='nome_do_usuario';
 ---
 
 ## 📧 **Contato**
+<<<<<<< HEAD
 Caso tenha dúvidas ou sugestões, entre em contato! 🚀🏸  
 
+=======
+Caso tenha dúvidas ou sugestões, entre em contato!  😊🚀
+>>>>>>> d04b78255774b3a7eab98acea5270b79505ed08e
