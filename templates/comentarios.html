@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Comentários</title>
+</head>
+<body>
+    {% extends "base.html" %}
+
+    {% block title %}
+    Comentários
+    {% endblock %}
+
+    {% block content %}
+    <h2>Comentários</h2>
+    <form method="POST">
+        <textarea 
+            name="comentario" 
+            placeholder="Escreva seu comentário..." 
+            required>
+        </textarea>
+        <button type="submit">Enviar</button>
+    </form>
+    <ul>
+        {% for comentario in comentarios %}
+        <li>
+            <strong>{{ comentario.usuario }}</strong>: {{ comentario.comentario }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endblock %}
+</body>
+</html>

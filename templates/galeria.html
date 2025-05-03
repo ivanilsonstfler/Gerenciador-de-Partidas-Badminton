@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Galeria - Melhores do Ano{% endblock %}
+{% block content %}
+<h2>Galeria dos Melhores do Ano</h2>
+
+<!-- Filtro de Categoria -->
+<select id="filtroCategoria">
+    <option value="Todos">Todos</option>
+    <option value="Simples Masculino">Simples Masculino</option>
+    <option value="Simples Feminino">Simples Feminino</option>
+    <option value="Duplas Masculinas">Duplas Masculinas</option>
+    <option value="Duplas Femininas">Duplas Femininas</option>
+    <option value="Mista">Mista</option>
+    <option value="Parabadminton">Parabadminton</option>
+</select>
+
+<!-- Galeria -->
+<div id="galeria-container">
+    {% for midia in midias %}
+    <div class="galeria-item" data-categoria="{{ midia.categoria }}">
+        <h3>{{ midia.nome }} - {{ midia.categoria }}</h3>
+        <img src="{{ midia.foto_url }}" alt="Foto de {{ midia.nome }}">
+        {% if midia.video_url %}
+        <video controls>
+            <source src="{{ midia.video_url }}" type="video/mp4">
+            Seu navegador não suporta vídeo.
+        </video>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Botões de Compartilhamento -->
+<div class="compartilhar"></div>
+    <button onclick="compartilharFacebook('{{ midia.nome }}', '{{ midia.foto_url }}')">Facebook</button>
+    <button onclick="compartilharTwitter('{{ midia.nome }}')">Twitter</button>
+    <button onclick="compartilharWhatsApp('{{ midia.nome }}')">WhatsApp</button>
+</div>
+{% endblock %}
+
+<!-- Scripts -->
+<script>
+    // Animação de exibição dos itens da galeria
+    document.addEventListener("DOMContentLoaded", function () {
+        const items = document.querySelectorAll(".galeria-item");
+        items.forEach((item, index) => {
+            setTimeout(() => {
+                item.classList.add("show");
+            }, index * 200);
+        });
+    });
+
+    // Filtro de categoria
+    document.getElementById("filtroCategoria").addEventListener("change", function () {
+        const categoriaSelecionada = this.value;
+        const itens = document.querySelectorAll(".galeria-item");
+
+        itens.forEach(item => {
+            const categoriaItem = item.getAttribute("data-categoria");
+            item.style.display = (categoriaSelecionada === "Todos" || categoriaItem === categoriaSelecionada) ? "block" : "none";
+        });
+    });
+
+    // Funções de compartilhamento
+    function compartilharFacebook(nome, imagem) {
+        const url = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&quote=Confira ${nome} em nossa galeria!`;
+        window.open(url, "_blank");
+    }
+
+    function compartilharTwitter(nome) {
+        const url = `https://twitter.com/intent/tweet?text=Confira ${nome} na nossa galeria! ${window.location.href}`;
+        window.open(url, "_blank");
+    }
+
+    function compartilharWhatsApp(nome) {
+        const url = `https://wa.me/?text=Confira ${nome} na galeria: ${window.location.href}`;
+        window.open(url, "_blank");
+    }
+</script>

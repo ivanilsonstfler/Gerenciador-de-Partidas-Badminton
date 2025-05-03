@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Index</title>
+</head>
+{% extends "base.html" %}
+
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<h2>Bem-vindo <b>Badminton e Parabadminton</b></h2>
+<p>Confira as últimas novidades, resultados e classificações!</p>
+<a href="/partidas">Veja as Partidas</a>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+<footer>
+    <p>&copy; 2025 Badminton e Parabadminton. Todos os direitos reservados.</p>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+{% extends "base.html" %}
+{% block title %}Classificação{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+{% block content %}
+<h2>Classificação</h2>
+<form method="GET" action="/classificacao">
+    <select name="categoria">
+        <option value="Simples Masculino">Simples Masculino</option>
+        <option value="Simples Feminino">Simples Feminino</option>
+        <option value="Duplas Masculinas">Duplas Masculinas</option>
+        <option value="Duplas Femininas">Duplas Femininas</option>
+        <option value="Mista">Mista</option>
+        <option value="Parabadminton">Parabadminton</option>
+    </select>
+    <button type="submit">Filtrar</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>Jogador</th>
+            <th>Pontos</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for jogador in classificacao %}
+        <tr>
+            <td>{{ jogador.jogador }}</td>
+            <td>{{ jogador.pontos }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+</body>
+</html>

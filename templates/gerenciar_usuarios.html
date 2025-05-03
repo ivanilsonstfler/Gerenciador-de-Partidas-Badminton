@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Usuários{% endblock %}
+
+{% block content %}
+<h2>Gerenciamento de Usuários</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Usuário</th>
+            <th>Tipo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.usuario }}</td>
+            <td>{{ usuario.tipo }}</td>
+            <td>
+                <!-- Formulário para alterar o tipo de usuário -->
+                <form method="POST" action="/alterar_usuario" style="display: inline;">
+                    {{ csrf_token() }}
+                    <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+                    <select name="tipo">
+                        <option value="usuario" {% if usuario.tipo == "usuario" %}selected{% endif %}>Usuário</option>
+                        <option value="administrador" {% if usuario.tipo == "administrador" %}selected{% endif %}>Administrador</option>
+                    </select>
+                    <button type="submit">Alterar</button>
+                </form>
+
+                <!-- Formulário para excluir o usuário -->
+                <form method="POST" action="/excluir_usuario" style="display: inline;">
+                    {{ csrf_token() }}
+                    <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+                    <button type="submit" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

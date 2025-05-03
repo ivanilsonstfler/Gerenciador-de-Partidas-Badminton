@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Adicionar Partidas</title>
+</head>
+{% extends "base.html" %}
+<body>
+{% block title %}Adicionar Partida{% endblock %}
+{% block content %}
+<h2>Adicionar Nova Partida</h2>
+<form method="POST">
+    <select name="categoria" required>
+        <option value="Simples Masculino">Simples Masculino</option>
+        <option value="Simples Feminino">Simples Feminino</option>
+        <option value="Duplas Masculinas">Duplas Masculinas</option>
+        <option value="Duplas Femininas">Duplas Femininas</option>
+        <option value="Mista">Mista</option>
+        <option value="Parabadminton">Parabadminton</option>
+    </select>
+    <input type="text" name="jogador1" placeholder="Jogador 1" required>
+    <input type="text" name="jogador2" placeholder="Jogador 2" required>
+    <input type="time" name="horario" required>
+    <input type="text" name="resultado" placeholder="Resultado">
+    <button type="submit">Adicionar Partida</button>
+</form>
+{% endblock %}
+</body>
+</html>

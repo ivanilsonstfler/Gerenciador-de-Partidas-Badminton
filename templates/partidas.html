@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    {% extends "base.html" %}
+{% block title %}Partidas{% endblock %}
+{% block content %}
+<h2>Partidas de Badminton e Parabadminton</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Categoria</th>
+            <th>Jogador 1</th>
+            <th>Jogador 2</th>
+            <th>Horário</th>
+            <th>Resultado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for partida in partidas %}
+        <tr>
+            <td>{{ partida.categoria }}</td>
+            <td>{{ partida.jogador1 }}</td>
+            <td>{{ partida.jogador2 }}</td>
+            <td>{{ partida.horario }}</td>
+            <td>{{ partida.resultado }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="/adicionar_partida">Adicionar Nova Partida</a>
+{% endblock %}
+</body>
+</html>

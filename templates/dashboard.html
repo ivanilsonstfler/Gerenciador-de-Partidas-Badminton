@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .notificacao-container {
+            margin-top: 20px;
+        }
+        .notificacao {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="graficoPartidas"></canvas>
+    <canvas id="graficoClassificacao"></canvas>
+    <canvas id="graficoHistorico"></canvas>
+
+    <div id="notificacoes" class="notificacao-container"></div>
+
+    <script>
+        // Gráfico de Partidas
+        const graficoPartidasCtx = document.getElementById("graficoPartidas").getContext("2d");
+        const graficoPartidas = new Chart(graficoPartidasCtx, {
+            type: 'bar',
+            data: {
+                labels: JSON.parse('{{ partidas_por_categoria|json_script:"labels" }}'),
+                datasets: [{
+                    label: 'Quantidade de Partidas',
+                    data: JSON.parse('{{ partidas_por_categoria|json_script:"data" }}'),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Buscar Notificações
+        function buscarNotificacoes() {
+            fetch("/notificacoes")
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById("notificacoes");
+                    container.innerHTML = "";
+                    data.forEach(evento => {
+                        const div = document.createElement("div");
+                        div.className = "notificacao";
+                        div.innerHTML = `<strong>${evento.nome}</strong> (${evento.data}): ${evento.descricao}`;
+                        container.appendChild(div);
+                    });
+                });
+        }
+        setInterval(buscarNotificacoes, 60000); // Atualiza notificações a cada minuto
+        buscarNotificacoes();
+
+        // Gráficos de Classificação e Histórico
+        fetch("/dados_graficos")
+            .then(response => response.json())
+            .then(data => {
+                // Gráfico de Classificação
+                new Chart(document.getElementById("graficoClassificacao").getContext("2d"), {
+                    type: 'bar',
+                    data: {
+                        labels: data.classificacao.map(j => j.jogador),
+                        datasets: [{
+                            label: 'Pontos',
+                            data: data.classificacao.map(j => j.pontos),
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { responsive: true }
+                });
+
+                // Gráfico Histórico
+                new Chart(document.getElementById("graficoHistorico").getContext("2d"), {
+                    type: 'pie',
+                    data: {
+                        labels: data.historico.map(p => p.categoria),
+                        datasets: [{
+                            data: data.historico.map(p => p.total),
+                            backgroundColor: ['red', 'blue', 'green', 'yellow', 'orange']
+                        }]
+                    },
+                    options: { responsive: true }
+                });
+            });
+    </script>
+</body>
+</html>
