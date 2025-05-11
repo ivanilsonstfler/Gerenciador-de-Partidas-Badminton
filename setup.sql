@@ -5,15 +5,14 @@ USE torneio_badminton;
 -- Tabela de usuários
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario VARCHAR(50) NOT NULL,
-    senha VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL,
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    senha BLOB NOT NULL,
     tipo ENUM('usuario', 'administrador') NOT NULL DEFAULT 'usuario'
 );
 
--- Inserção de usuário para teste
-INSERT INTO usuarios (usuario, senha, email, tipo) VALUES
-('ivanilson', 'krolanda', 'ivanilsonpc@outlook.com', 'usuario');
+-- Inserção de usuário para teste com senha hashada
+INSERT INTO usuarios (usuario, senha, tipo) VALUES 
+('ivanilson', '$2b$12$DtlN5N8Ih8xMC9wcLbzn3eo3aHi4oUQl6ANUUuhj8wvEuEbOuJ47W', 'usuario');
 
 -- Tabela de partidas
 CREATE TABLE partidas (

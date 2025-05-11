@@ -7,22 +7,31 @@ from flask_session import Session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired
 import bcrypt
 import logging
 
+# Gere um hash seguro para uma nova senha
+nova_senha = "sua_senha_aqui"
+senha_hash = bcrypt.hashpw(nova_senha.encode('utf-8'), bcrypt.gensalt())
+print(senha_hash.decode('utf-8'))
+
 # Load environment variables
 load_dotenv()
+print("DB_PASSWORD:", os.getenv("DB_PASSWORD")) 
 
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")  # Secret key for sessions
 
+# CSRF protection
+csrf = CSRFProtect(app)
+
 # Logging configuration
 logging.basicConfig(level=logging.INFO)
 app.logger.info("Application initialized successfully!")
-
-# CSRF protection
-csrf = CSRFProtect(app)
 
 # Rate limiting
 limiter = Limiter(get_remote_address, app=app, default_limits=["5 per minute"])
@@ -36,14 +45,21 @@ def conectar_bd():
     return pymysql.connect(
         host=os.getenv("DB_HOST", "localhost"),
         user=os.getenv("DB_USER", "root"),
-        password=os.getenv("DB_PASSWORD", "sua_senha"),
-        database=os.getenv("DB_NAME", "torneio"),
+        password=os.getenv("DB_PASSWORD", ""),
+        database=os.getenv("DB_NAME", "torneio_badminton"),
+        port=3306, 
         cursorclass=pymysql.cursors.DictCursor
     )
 
 # Utility functions
 def is_admin():
     return "usuario" in session and session.get("tipo") == "administrador"
+
+# Forms
+class LoginForm(FlaskForm):
+    usuario = StringField("Usuário", validators=[DataRequired()])
+    senha = PasswordField("Senha", validators=[DataRequired()])
+    submit = SubmitField("Entrar")
 
 # Routes
 @app.route("/")
@@ -52,9 +68,10 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        usuario = request.form["usuario"]
-        senha = request.form["senha"]
+    form = LoginForm()
+    if form.validate_on_submit():
+        usuario = form.usuario.data
+        senha = form.senha.data
 
         conn = conectar_bd()
         with conn.cursor() as cursor:
@@ -62,11 +79,12 @@ def login():
             user = cursor.fetchone()
         conn.close()
 
-        if user and bcrypt.checkpw(senha.encode('utf-8'), user["senha"].encode('utf-8')):
+        if user and bcrypt.checkpw(senha.encode('utf-8'), user["senha"]):
             session["usuario"] = usuario
             session["tipo"] = user.get("tipo", "usuario")
             return redirect(url_for("home"))
-    return render_template("login.html")
+
+    return render_template("login.html", form=form)
 
 @app.route("/logout")
 def logout():

@@ -1,14 +1,15 @@
 {% extends "base.html" %}
-
 {% block title %}Login{% endblock %}
-
 {% block content %}
 <h2>Login</h2>
 <form method="POST">
-    {{ csrf_token() }}
-    <input type="text" name="usuario" placeholder="Usuário" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="senha" placeholder="Senha" required>
-    <button type="submit">Entrar</button>
+    {{ form.hidden_tag() }}  <!-- Garante que o token CSRF está no formulário -->
+    <label for="usuario">Usuário:</label>
+    {{ form.usuario }}
+    
+    <label for="senha">Senha:</label>
+    {{ form.senha }}
+    
+    {{ form.submit }}
 </form>
 {% endblock %}
