@@ -1,8 +1,11 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> d04b78255774b3a7eab98acea5270b79505ed08e
+=======
+>>>>>>> bbb5ee0a9e672c7b39b8d9f4451fed5bdc245c22
 ## 🏸 ** Badminton e Parabadminton** - README
 
 ### 📌 **Descrição**
